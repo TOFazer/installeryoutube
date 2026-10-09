@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111923">
+  <title>OverLoad — Prêt pour le montage</title>
+  <link rel="stylesheet" href="/app.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#overview" aria-label="OverLoad, accueil">
+        <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span class="brand-copy"><strong>OverLoad</strong><small>MEDIA WORKBENCH</small></span>
+      </a>
+
+      <div class="sidebar-label">ESPACE DE TRAVAIL</div>
+      <div class="project-switcher">
+        <span class="project-icon" aria-hidden="true">▦</span>
+        <label class="sr-only" for="project-select">Projet actif</label>
+        <select id="project-select" aria-label="Projet actif"></select>
+        <button id="new-project-button" class="icon-button project-add" type="button" aria-label="Créer un projet" title="Créer un projet">＋</button>
+      </div>
+
+      <nav class="primary-nav" aria-label="Navigation principale">
+        <button class="nav-item is-active" type="button" data-view="overview"><span class="nav-glyph">⌂</span><span>Vue d'ensemble</span></button>
+        <button class="nav-item" type="button" data-view="media"><span class="nav-glyph">▧</span><span>Médias</span><span id="nav-media-count" class="nav-count">0</span></button>
+        <button class="nav-item" type="button" data-view="conversions"><span class="nav-glyph">⟳</span><span>Conversions</span><span id="nav-job-count" class="nav-count hidden">0</span></button>
+        <button class="nav-item" type="button" data-view="integrations"><span class="nav-glyph">⌘</span><span>Intégrations</span></button>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="local-card">
+          <span class="local-dot"></span>
+          <div><strong>Traitement local</strong><small>Les originaux restent intacts</small></div>
+        </div>
+        <div class="sidebar-version">OVERLOAD <span id="app-version">0.1.0</span></div>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <div class="breadcrumbs"><span>Atelier</span><span class="crumb-divider">/</span><strong id="breadcrumb-title">Vue d'ensemble</strong></div>
+        <div class="topbar-actions">
+          <label class="editor-select-wrap">
+            <span class="sr-only">Logiciel cible pour le diagnostic</span>
+            <span class="editor-select-icon">◈</span>
+            <select id="target-editor" aria-label="Logiciel cible pour le diagnostic">
+              <option value="premiere">Premiere Pro</option>
+              <option value="resolve">DaVinci Resolve</option>
+              <option value="capcut">CapCut</option>
+            </select>
+          </label>
+          <button id="open-folder-button" class="button button-secondary button-small" type="button"><span aria-hidden="true">↗</span> Dossier projet</button>
+          <div class="avatar" aria-label="OverLoad local">O</div>
+        </div>
+      </header>
+
+      <div class="workspace">
+        <section id="overview-view" class="view-panel">
+          <div class="welcome-row">
+            <div>
+              <div class="eyebrow"><span class="eyebrow-line"></span> POST-PRODUCTION, SANS SURPRISE</div>
+              <h1>Prêt pour le <span>montage.</span></h1>
+              <p class="lede">Vérifie tes médias, repère les codecs à risque et prépare un espace de projet propre avant l'import.</p>
+            </div>
+            <div class="welcome-actions">
+              <button id="import-main-button" class="button button-primary" type="button"><span class="button-plus">＋</span> Télécharger et importer</button>
+              <button id="open-folder-main" class="button button-quiet" type="button">Ouvrir le dossier <span aria-hidden="true">↗</span></button>
+            </div>
+          </div>
+
+          <div class="notice notice-neutral" id="downloader-notice">
+            <span class="notice-icon">i</span>
+            <div><strong>Import local prêt.</strong> Cette base ne contient pas encore de moteur de téléchargement : ajoute ici des fichiers déjà téléchargés. OverLoad les vérifiera avant de les déclarer prêts au montage.</div>
+            <button class="notice-close" type="button" aria-label="Masquer l'information">×</button>
+          </div>
+
+          <div class="tool-health" id="tool-health" aria-live="polite">
+            <div class="tool-health-title"><span class="pulse-dot"></span> État des outils locaux</div>
+            <div class="tool-pill" id="ffprobe-status"><span class="mini-status"></span><span>FFprobe : vérification…</span></div>
+            <div class="tool-pill" id="ffmpeg-status"><span class="mini-status"></span><span>FFmpeg : vérification…</span></div>
+          </div>
+
+          <div class="stats-grid">
+            <article class="stat-card">
+              <div class="stat-icon stat-icon-green">✓</div>
+              <div class="stat-meta"><span>Médias vérifiés</span><strong id="stat-verified">0</strong><small>Décodage intégral confirmé</small></div>
+            </article>
+            <article class="stat-card">
+              <div class="stat-icon stat-icon-amber">!</div>
+              <div class="stat-meta"><span>À contrôler</span><strong id="stat-review">0</strong><small>Codec ou intégrité à vérifier</small></div>
+            </article>
+            <article class="stat-card">
+              <div class="stat-icon stat-icon-violet">▤</div>
+              <div class="stat-meta"><span>Résolution moyenne</span><strong id="stat-resolution">—</strong><small>Sur les vidéos du projet</small></div>
+            </article>
+            <article class="stat-card">
+              <div class="stat-icon stat-icon-blue">⟳</div>
+              <div class="stat-meta"><span>Conversions actives</span><strong id="stat-conversions">0</strong><small>Annulables à tout moment</small></div>
+            </article>
+          </div>
+
+          <div class="section-heading overview-library-heading">
+            <div><div class="eyebrow eyebrow-muted">TON ESPACE</div><h2>Derniers médias</h2></div>
+            <button class="text-button" type="button" data-go-view="media">Voir toute la bibliothèque <span aria-hidden="true">→</span></button>
+          </div>
+          <div id="recent-media" class="recent-grid"></div>
+          <div id="overview-empty" class="empty-card">
+            <div class="empty-illustration"><span class="empty-file">▧</span><span class="empty-spark">✦</span></div>
+            <strong>Ton espace de montage commence ici.</strong>
+            <p>Ajoute une vidéo ou un son. OverLoad détectera le conteneur, les codecs, la durée et les pistes disponibles.</p>
+            <button class="button button-secondary" type="button" data-open-picker>Ajouter un premier média</button>
+          </div>
+        </section>
+
+        <section id="media-view" class="view-panel hidden">
+          <div class="page-heading">
+            <div><div class="eyebrow eyebrow-muted">BIBLIOTHÈQUE DU PROJET</div><h1>Fichiers média</h1><p class="lede">Importe, diagnostique et classe tes sources sans toucher aux originaux.</p></div>
+            <button class="button button-primary" type="button" data-open-picker><span class="button-plus">＋</span> Ajouter des médias</button>
+          </div>
+
+          <div class="upload-zone" id="upload-zone" role="group" aria-label="Déposer ou parcourir les médias du projet">
+            <input id="file-input" type="file" accept="video/*,audio/*,image/*,.mkv,.mxf,.mts,.m2ts,.webm,.mov,.mp4,.avi,.wav,.flac,.opus" multiple hidden aria-label="Sélectionner les médias à importer">
+            <div class="upload-icon-wrap"><span class="upload-arrow">↑</span></div>
+            <div class="upload-copy"><strong>Glisse tes médias ici</strong><span>ou <button class="inline-link" type="button" data-open-picker>parcours tes fichiers</button></span><small>Vidéo, audio et image · originaux conservés</small></div>
+            <div class="upload-action"><span>AJOUTER AU PROJET</span><b>＋</b></div>
+          </div>
+          <div id="upload-queue" class="upload-queue" aria-live="polite"></div>
+
+          <div class="library-toolbar">
+            <div class="filter-tabs" role="tablist" aria-label="Filtrer les médias">
+              <button class="filter-tab is-active" type="button" data-filter="all">Tous <span id="filter-all-count">0</span></button>
+              <button class="filter-tab" type="button" data-filter="video">Vidéo</button>
+              <button class="filter-tab" type="button" data-filter="audio">Audio</button>
+              <button class="filter-tab" type="button" data-filter="review">À vérifier <span id="filter-review-count">0</span></button>
+            </div>
+            <div class="library-actions"><span id="library-count">0 fichier</span><button id="refresh-library" class="icon-button refresh-button" type="button" aria-label="Actualiser les diagnostics" title="Actualiser les diagnostics">↻</button></div>
+          </div>
+
+          <div class="table-card">
+            <div class="table-scroll">
+              <table class="media-table">
+                <thead><tr><th>FICHIER</th><th>FORMAT &amp; CODECS</th><th>PROPRIÉTÉS</th><th>DIAGNOSTIC</th><th><span class="sr-only">Actions</span></th></tr></thead>
+                <tbody id="media-table-body"></tbody>
+              </table>
+            </div>
+            <div id="media-empty" class="table-empty hidden"><div class="empty-table-icon">▧</div><strong>Aucun média dans cette vue</strong><p>Les fichiers ajoutés apparaîtront ici après leur analyse.</p></div>
+          </div>
+          <p class="table-footnote"><span class="footnote-dot"></span> Un codec à risque n'indique pas un fichier endommagé. OverLoad distingue la lisibilité du média de sa compatibilité avec le logiciel choisi.</p>
+        </section>
+
+        <section id="conversions-view" class="view-panel hidden">
+          <div class="page-heading">
+            <div><div class="eyebrow eyebrow-muted">PROFIL FACULTATIF</div><h1>Conversions</h1><p class="lede">Crée une copie plus facile à échanger avec ton logiciel de montage. La source n'est jamais écrasée.</p></div>
+          </div>
+          <div class="conversion-profile-card">
+            <div class="profile-visual"><div class="profile-orbit orbit-one"></div><div class="profile-orbit orbit-two"></div><div class="profile-center">H.264</div><span class="profile-chip chip-mp4">MP4</span><span class="profile-chip chip-aac">AAC</span></div>
+            <div class="profile-copy"><span class="profile-tag">PROFIL DE COMPATIBILITÉ</span><h2>MP4 · H.264 · AAC</h2><p>Conserve la résolution et les horodatages d'origine. Si les flux sont déjà compatibles, OverLoad les copie sans réencodage. Sinon, la vidéo est encodée en H.264 et l'audio en AAC.</p><div class="profile-badges"><span>✓ Aucune réduction de résolution imposée</span><span>✓ Source conservée</span><span>✓ Annulable</span></div><div class="profile-note">Le réencodage peut prendre du temps et entraîner une perte de qualité. Lance-le seulement si nécessaire.</div></div>
+            <div class="profile-engine" id="conversion-engine-badge"><span class="mini-status"></span><span>FFmpeg requis</span></div>
+          </div>
+          <div class="section-heading conversion-list-heading"><div><div class="eyebrow eyebrow-muted">SUIVI</div><h2>File de conversion</h2></div><span class="live-label"><span class="live-dot"></span> Mise à jour en direct</span></div>
+          <div id="conversion-jobs" class="job-list"></div>
+          <div id="conversion-empty" class="empty-card compact-empty"><div class="empty-illustration"><span class="empty-file">⟳</span></div><strong>Aucune conversion en cours.</strong><p>Dans la bibliothèque, utilise « Convertir » sur une vidéo vérifiée si son codec pose problème.</p><button class="button button-secondary" type="button" data-go-view="media">Ouvrir la bibliothèque</button></div>
+        </section>
+
+        <section id="integrations-view" class="view-panel hidden">
+          <div class="page-heading">
+            <div><div class="eyebrow eyebrow-muted">FLUX DE TRAVAIL</div><h1>Logiciels de montage</h1><p class="lede">Prépare un dossier commun et ouvre un média dans le logiciel installé. Les raccourcis de lancement sont dépendants du système.</p></div>
+            <button class="button button-secondary" type="button" data-open-folder>Ouvrir le dossier projet <span aria-hidden="true">↗</span></button>
+          </div>
+          <div class="integration-grid">
+            <article class="integration-card" data-editor-card="premiere"><div class="integration-top"><div class="editor-logo premiere-logo">Pr</div><span class="integration-status">Détection…</span></div><h2>Adobe Premiere Pro</h2><p>Diagnostic de compatibilité, puis ouverture du média sélectionné dans Premiere Pro quand l'application est détectée.</p><button class="integration-action" type="button" data-open-latest-editor="premiere">Ouvrir le dernier média <span>→</span></button></article>
+            <article class="integration-card" data-editor-card="resolve"><div class="integration-top"><div class="editor-logo resolve-logo">DaV</div><span class="integration-status">Détection…</span></div><h2>DaVinci Resolve</h2><p>Organisation du projet indépendante du logiciel et ouverture directe du fichier sur les installations prises en charge.</p><button class="integration-action" type="button" data-open-latest-editor="resolve">Ouvrir le dernier média <span>→</span></button></article>
+            <article class="integration-card" data-editor-card="capcut"><div class="integration-top"><div class="editor-logo capcut-logo">C</div><span class="integration-status">Détection…</span></div><h2>CapCut</h2><p>Accès au même dossier de médias. La compatibilité est indiquée séparément pour limiter les surprises à l'import.</p><button class="integration-action" type="button" data-open-latest-editor="capcut">Ouvrir le dernier média <span>→</span></button></article>
+          </div>
+          <div class="integration-info"><span class="integration-info-icon">↗</span><div><strong>Ouvrir n'est pas toujours importer dans une timeline.</strong><p>OverLoad lance le logiciel avec le média en argument lorsque le système le permet. La manière de l'ajouter à un projet ou à une séquence dépend de chaque application et de sa version.</p></div></div>
+          <div class="folder-layout-card"><div class="folder-art"><span>▰</span><span>▰</span><span>▰</span></div><div><span class="profile-tag">STRUCTURE DU PROJET</span><h2>Un dossier, plusieurs logiciels.</h2><p><code>Media/Video</code> · <code>Media/Audio</code> · <code>Media/Images</code> · <code>Converted</code> · <code>Exports</code> · <code>Needs review</code></p></div><button id="open-folder-integration" class="button button-secondary" type="button">Ouvrir le dossier <span aria-hidden="true">↗</span></button></div>
+        </section>
+
+        <footer class="workspace-footer"><span>OverLoad · atelier média local</span><span>Les originaux ne sont jamais remplacés par une conversion.</span></footer>
+      </div>
+    </main>
+  </div>
+
+  <dialog id="project-dialog" class="dialog-card">
+    <form id="new-project-form" method="dialog">
+      <div class="dialog-mark">＋</div><button class="dialog-close" type="button" data-close-dialog aria-label="Fermer">×</button>
+      <div class="eyebrow eyebrow-muted">NOUVEL ESPACE DE TRAVAIL</div><h2>Créer un projet</h2><p>OverLoad crée automatiquement les dossiers pour les vidéos, audios, images et conversions.</p>
+      <label for="project-name-input">Nom du projet</label><input id="project-name-input" name="name" maxlength="100" placeholder="Ex. Clip de voyage — été" required autocomplete="off">
+      <div class="dialog-actions"><button class="button button-quiet" type="button" data-close-dialog>Annuler</button><button class="button button-primary" type="submit">Créer le projet <span>→</span></button></div>
+    </form>
+  </dialog>
+
+  <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
+</body>
+</html>

@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "overload-media-workbench"
+version = "0.1.0"
+description = "Atelier local de vérification et préparation de médias pour le montage vidéo."
+requires-python = ">=3.10"
+dependencies = []
+
+[project.scripts]
+overload = "overload.cli:main"
+
+[tool.setuptools]
+packages = ["overload"]
+
+[tool.setuptools.package-data]
+overload = ["web/*.html", "web/*.css", "web/*.js"]
