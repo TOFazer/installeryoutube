@@ -11,3 +11,10 @@ htmlcov/
 Thumbs.db
 .env
 .overload-data/
+build/
+dist/
+.venv/
+.pytest_cache/
+benchmark-results/
+installer/version_info.txt
+*.tmp
