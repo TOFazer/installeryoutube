@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OverLoad — Fast downloads. Smooth workflow. Built for editors.</title>
+<meta name="description" content="OverLoad : application Windows gratuite pour télécharger et organiser vos médias de montage. Projets, file d'attente, vitesse en direct.">
+<link rel="icon" href="logo.svg">
+<style>
+:root{--bg:#16171d;--card:#22232c;--b:#30313d;--t:#ececf1;--m:#9a9bab;--v:#8b5cf6;--bl:#3b82f6}
+*{box-sizing:border-box;margin:0}body{font-family:"Segoe UI",Inter,system-ui,sans-serif;background:var(--bg);color:var(--t);line-height:1.6}
+a{color:inherit}.w{max-width:1100px;margin:auto;padding:0 24px}
+nav{display:flex;align-items:center;gap:12px;padding:22px 0}nav b{font-size:20px}nav .sp{flex:1}nav a{color:var(--m);text-decoration:none;margin-left:18px}
+.hero{text-align:center;padding:70px 0 40px;background:radial-gradient(600px 300px at 30% 0,rgba(139,92,246,.25),transparent),radial-gradient(600px 300px at 70% 10%,rgba(59,130,246,.2),transparent)}
+h1{font-size:clamp(40px,7vw,72px);font-weight:900;background:linear-gradient(90deg,var(--v),var(--bl));-webkit-background-clip:text;color:transparent}
+.slogan{font-size:20px;color:var(--m);margin:6px 0 30px}
+.btn{display:inline-block;padding:14px 26px;border-radius:14px;font-weight:700;text-decoration:none;margin:6px}
+.p{background:linear-gradient(90deg,var(--v),var(--bl));color:#fff}.s{border:1px solid var(--b);background:var(--card)}
+.shot{margin:40px auto 0;max-width:960px;border-radius:18px;border:1px solid var(--b);box-shadow:0 30px 80px rgba(0,0,0,.5);width:100%}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin:60px 0}
+.c{background:var(--card);border:1px solid var(--b);border-radius:18px;padding:22px}.c h3{margin:8px 0 4px}.c p{color:var(--m);font-size:15px}
+.i{font-size:26px}h2{font-size:32px;text-align:center;margin:70px 0 10px}.sub{text-align:center;color:var(--m);max-width:720px;margin:auto}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:30px}.two img{width:100%;border-radius:14px;border:1px solid var(--b)}
+@media(max-width:700px){.two{grid-template-columns:1fr}}
+footer{color:var(--m);text-align:center;padding:60px 0 40px;font-size:14px}
+</style>
+</head>
+<body>
+<div class="w"><nav><img src="logo.svg" width="34" alt=""><b>OverLoad</b><span class="sp"></span>
+<a href="#features">Fonctionnalités</a><a href="#speed">Vitesse</a><a href="https://github.com/TOFazer/OverLoad">GitHub</a></nav></div>
+<header class="hero"><div class="w">
+<h1>OverLoad</h1><p class="slogan">Fast downloads. Smooth workflow. Built for editors.</p>
+<a class="btn p" href="https://github.com/TOFazer/OverLoad/releases/latest">⬇ Télécharger pour Windows</a>
+<a class="btn s" href="https://github.com/TOFazer/OverLoad">Code source</a>
+<p style="color:var(--m);font-size:13px;margin-top:10px">Gratuit • Open source • Sans publicité • Windows 10/11</p>
+<img class="shot" src="screenshots/home.png" alt="Capture d'OverLoad">
+</div></header>
+<main class="w">
+<div class="grid" id="features">
+<div class="c"><div class="i">⚡</div><h3>Rapidité</h3><p>Connexions parallèles adaptées à chaque fichier, téléchargements simultanés et vitesse réelle en Mo/s.</p></div>
+<div class="c"><div class="i">🎬</div><h3>Pour les monteurs</h3><p>Un dossier par projet, MP4 H.264 compatible avec Premiere et DaVinci, WAV sans perte.</p></div>
+<div class="c"><div class="i">📚</div><h3>En lot</h3><p>Colle dix liens d'un coup : ils partent tous dans la file d'attente, sans doublon.</p></div>
+<div class="c"><div class="i">📂</div><h3>Prêt pour le montage</h3><p>Bibliothèque consultable par recherche, avec résolution, images/s et codecs. Le fichier s'ouvre en un clic.</p></div>
+</div>
+<h2>Une file d'attente qui travaille pour toi</h2>
+<p class="sub">Annuler, réessayer, reprendre après une coupure ou une fermeture de l'app : chaque fichier est ensuite vérifié et reçoit son empreinte SHA-256.</p>
+<div class="two"><img src="screenshots/downloads.png" alt="Téléchargements"><img src="screenshots/projects.png" alt="Projets"></div>
+<h2 id="speed">Et la vitesse, honnêtement ?</h2>
+<p class="sub">OverLoad exploite au mieux ta connexion, mais aucune application ne peut garantir une vitesse supérieure partout : le serveur et les limites de la source comptent aussi. Nous publions uniquement des <b>mesures réelles</b>, reproductibles avec <code>scripts/benchmark.py</code>.</p>
+<div class="two"><img src="screenshots/home-light.png" alt="Thème clair"><img src="screenshots/settings.png" alt="Paramètres"></div>
+</main>
+<footer>OverLoad — licence MIT. Télécharge uniquement des contenus que tu as le droit d'utiliser.<br>
+<a href="https://github.com/TOFazer/OverLoad/releases">Notes de version</a> · <a href="https://github.com/TOFazer/OverLoad/issues">Signaler un bug</a></footer>
+</body></html>
