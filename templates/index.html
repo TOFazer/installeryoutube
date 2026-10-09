@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OverLoad — Téléchargeur YouTube</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;
+background:radial-gradient(circle at 20% 20%,#6d28d9 0,transparent 40%),radial-gradient(circle at 80% 80%,#db2777 0,transparent 40%),#0f0a1f;color:#f5f3ff;padding:20px}
+.card{width:100%;max-width:540px;background:rgba(255,255,255,.06);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.12);border-radius:24px;padding:36px;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+h1{font-size:2rem;background:linear-gradient(90deg,#a78bfa,#f472b6);-webkit-background-clip:text;color:transparent;margin-bottom:4px}
+.sub{color:#c4b5fd;opacity:.8;margin-bottom:24px}
+.row{display:flex;gap:10px}
+input{flex:1;padding:14px 16px;border-radius:14px;border:1px solid rgba(255,255,255,.15);background:rgba(0,0,0,.3);color:#fff;font-size:1rem;outline:none;transition:.2s}
+input:focus{border-color:#a78bfa;box-shadow:0 0 0 3px rgba(167,139,250,.3)}
+button{padding:14px 20px;border:none;border-radius:14px;font-weight:600;font-size:1rem;cursor:pointer;color:#fff;background:linear-gradient(90deg,#7c3aed,#db2777);transition:.2s}
+button:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 20px rgba(219,39,119,.4)}
+button:disabled{opacity:.5;cursor:not-allowed}
+.formats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:20px 0}
+.fmt{padding:16px;border-radius:14px;border:2px solid rgba(255,255,255,.12);background:rgba(0,0,0,.2);cursor:pointer;text-align:center;transition:.2s}
+.fmt.active{border-color:#f472b6;background:rgba(244,114,182,.15)}
+.fmt .ic{font-size:1.6rem}.fmt small{display:block;opacity:.7;margin-top:2px}
+.info{display:none;gap:14px;align-items:center;margin-top:20px;padding:12px;border-radius:14px;background:rgba(0,0,0,.25)}
+.info img{width:120px;border-radius:10px}.info h3{font-size:1rem;margin-bottom:4px}.info p{font-size:.85rem;opacity:.75}
+.bar{height:12px;border-radius:99px;background:rgba(255,255,255,.1);overflow:hidden;margin-top:20px;display:none}
+.fill{height:100%;width:0;background:linear-gradient(90deg,#a78bfa,#f472b6);transition:width .3s}
+.status{margin-top:10px;font-size:.9rem;min-height:1.2em;color:#ddd6fe}
+.err{color:#fca5a5}.ok{color:#86efac}
+#dl{width:100%}
+a.save{display:none;margin-top:14px;text-align:center;text-decoration:none}
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>⚡ OverLoad</h1>
+  <p class="sub">Télécharge tes vidéos YouTube en vidéo ou en MP3.</p>
+  <div class="row">
+    <input id="url" placeholder="Colle le lien de la vidéo YouTube…">
+    <button id="check">🔍</button>
+  </div>
+  <div class="info" id="info"><img id="thumb" alt=""><div><h3 id="title"></h3><p id="meta"></p></div></div>
+  <div class="formats">
+    <div class="fmt active" data-f="video"><div class="ic">🎬</div>Vidéo<small>Meilleure qualité</small></div>
+    <div class="fmt" data-f="audio"><div class="ic">🎵</div>Audio<small>MP3 192 kbps</small></div>
+  </div>
+  <button id="dl">Télécharger</button>
+  <div class="bar" id="bar"><div class="fill" id="fill"></div></div>
+  <div class="status" id="status"></div>
+  <a class="save" id="save"><button style="width:100%">💾 Enregistrer le fichier</button></a>
+</div>
+<script>
+const $=id=>document.getElementById(id);let fmt="video";
+document.querySelectorAll(".fmt").forEach(e=>e.onclick=()=>{document.querySelectorAll(".fmt").forEach(x=>x.classList.remove("active"));e.classList.add("active");fmt=e.dataset.f});
+const setStatus=(t,c="")=>{$("status").textContent=t;$("status").className="status "+c};
+async function post(u,b){const r=await fetch(u,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(b)});const j=await r.json();if(!r.ok)throw new Error(j.error);return j}
+$("check").onclick=async()=>{const url=$("url").value.trim();if(!url)return setStatus("❌ Lien invalide.","err");
+  setStatus("Recherche…");try{const i=await post("api/info",{url});$("thumb").src=i.thumbnail||"";$("title").textContent=i.title;
+  $("meta").textContent=`${i.uploader} • ⏱ ${i.duration}`;$("info").style.display="flex";setStatus("")}catch(e){setStatus("❌ "+e.message,"err")}};
+$("dl").onclick=async()=>{const url=$("url").value.trim();if(!url)return setStatus("❌ Lien invalide.","err");
+  $("dl").disabled=true;$("save").style.display="none";$("bar").style.display="block";$("fill").style.width="0";
+  if($("info").style.display!=="flex")$("check").onclick();
+  try{const {id}=await post("api/download",{url,format:fmt});
+    const t=setInterval(async()=>{const p=await (await fetch("api/progress/"+id)).json();$("fill").style.width=p.percent+"%";
+      if(p.status==="downloading")setStatus(`Téléchargement : ${p.percent}% | Vitesse : ${p.speed}`);
+      else if(p.status==="processing")setStatus("Conversion en cours…");
+      else if(p.status==="finished"){clearInterval(t);setStatus("✅ Téléchargement terminé !","ok");$("save").href="api/file/"+id;$("save").style.display="block";$("dl").disabled=false;location.href="api/file/"+id}
+      else if(p.status==="error"){clearInterval(t);setStatus("❌ "+p.error,"err");$("dl").disabled=false}},700);
+  }catch(e){setStatus("❌ "+e.message,"err");$("dl").disabled=false}};
+$("url").addEventListener("keydown",e=>e.key==="Enter"&&$("check").onclick());
+</script>
+</body>
+</html>
