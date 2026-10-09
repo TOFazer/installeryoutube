@@ -1,5 +1,8 @@
 __pycache__/
 build/
 dist/
-*.spec
 .venv/
+.pytest_cache/
+benchmark-results/
+installer/version_info.txt
+*.tmp
