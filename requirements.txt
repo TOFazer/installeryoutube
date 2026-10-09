@@ -1,2 +1,4 @@
-flask>=3.0
+customtkinter>=5.2
 yt-dlp>=2024.1.0
+pillow>=10.0
+imageio-ffmpeg>=0.5
